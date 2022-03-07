@@ -1,4 +1,3 @@
-use crate::serpent::player::Player;
 use crate::{HEIGHT, WIDTH};
 use bracket_lib::prelude::*;
 
@@ -15,7 +14,7 @@ impl Item {
         Self {
             x: random.range(1, WIDTH),
             y: random.range(1, HEIGHT),
-            glyph:random.range(13, 16),
+            glyph: random.range(13, 16),
         }
     }
     pub fn render(&mut self, ctx: &mut BTerm) {
@@ -28,7 +27,7 @@ impl Item {
             PointF::new(1.0, 1.0),
             BLACK,
             DARK_BLUE,
-            self.glyph,//self.glyph, //0 as u16, //self.symbol //DRAGON_FRAMES[self.frame]
+            self.glyph, //self.glyph, //0 as u16, //self.symbol //DRAGON_FRAMES[self.frame]
         );
         ctx.set_active_console(0);
     }

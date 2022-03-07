@@ -79,14 +79,13 @@ impl Player {
     }
 
     pub fn render(&mut self, ctx: &mut BTerm) {
-        let mut glyph_idx: u16;
-        match self.direction {
-            Direction::Left => glyph_idx = 17,
-            Direction::Right => glyph_idx = 16,
-            Direction::Up => glyph_idx = 4,
-            Direction::Down => glyph_idx = 4,
-            _ => glyph_idx = 16,
-        }
+        let mut glyph_idx = match self.direction {
+            Direction::Left => 17,
+            Direction::Right => 16,
+            Direction::Up => 4,
+            Direction::Down => 4,
+            _ => 16,
+        };
 
         if let Some(symbol) = self.symbol {
             glyph_idx = symbol;
@@ -95,7 +94,7 @@ impl Player {
         ctx.set_active_console(1);
         ctx.cls();
 
-        let head = self.segments.clone().get(0).unwrap().clone();
+        let head = *self.segments.clone().get(0).unwrap();
         ctx.set_fancy(
             PointF::new(head.x as f32, head.y as f32),
             1,
@@ -103,7 +102,7 @@ impl Player {
             PointF::new(1.0, 1.0),
             WHITE,
             DARK_GRAY,
-            glyph_idx, //0 as u16, //self.symbol //DRAGON_FRAMES[self.frame]
+            glyph_idx,
         );
         for segment in self.segments.clone().iter().skip(1) {
             ctx.set_fancy(

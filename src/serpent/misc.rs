@@ -1,9 +1,5 @@
 use crate::serpent::item::Item;
-use crate::serpent::obstacle::Obstacle;
-
 use crate::serpent::player::{Direction, Player};
-//obstacle::Obstacle;
-//use crate::player::Player;
 use bracket_lib::prelude::*;
 
 use crate::{FRAME_DURATION, HEIGHT, WIDTH};
@@ -14,8 +10,6 @@ pub struct State {
     frame_time: f32,
     score: i32,
     item: Item,
-    obstacle: Obstacle,
-    obstacles: Vec<Obstacle>,
     symbol: Option<u16>,
 }
 
@@ -27,8 +21,6 @@ impl State {
             frame_time: 0.0,
             score: 0,
             item: Item::spawn(),
-            obstacle: Obstacle::new(WIDTH as f32, 0),
-            obstacles: vec![Obstacle::new((WIDTH / 2) as f32, 0)],
             symbol: None,
         }
     }
@@ -39,8 +31,6 @@ impl State {
             self.player = Player::new(25, 35, None);
         }
         self.score = 0;
-        self.obstacle = Obstacle::new(WIDTH as f32, 0);
-        self.obstacles = vec![Obstacle::new((WIDTH - 10) as f32, 0)];
         self.item = Item::spawn();
         self.frame_time = 0.0;
         self.mode = GameMode::Playing;
@@ -153,56 +143,21 @@ impl State {
         if self.player.x > WIDTH {
             self.mode = GameMode::GameOver
         }
-        for s in self.player.segments.iter().skip(1){
-            if self.player.segments.get(0).unwrap().x == s.x &&
-                self.player.segments.get(0).unwrap().y == s.y &&
-                self.player.segments.last().unwrap().direction_now != Direction::Stopped
+        for s in self.player.segments.iter().skip(1) {
+            if self.player.segments.get(0).unwrap().x == s.x
+                && self.player.segments.get(0).unwrap().y == s.y
+                && self.player.segments.last().unwrap().direction_now != Direction::Stopped
             {
                 self.mode = GameMode::GameOver;
             }
         }
-        //self.obstacle.render(self.player.x , ctx);
-        //for o in &mut self.obstacles {
-        //    o.render(self.player.x , ctx);
-        //    if o.hit_obstacle(&self.player) {
-        //        self.mode = GameMode::GameOver;
-        //    }
-        //    if o.x < self.player.x {
-        //        self.score += 1;
-        //    }
-        // }
-        //o.render(self.player.x, ctx);
-        //self.obstacles.push(Obstacle::new(WIDTH, self.score));
-
         self.player.render(ctx);
         self.item.render(ctx);
 
-        if self.player.x == self.item.x && self.player.y == self.item.y{
+        if self.player.x == self.item.x && self.player.y == self.item.y {
             self.player.append();
             self.item = Item::spawn();
         }
-
-        // if self.player.x > self.obstacle.x as f32 {
-        //     self.score += 1;
-        // self.obstacle = Obstacle::new(self.player.x + WIDTH as f32, self.score);
-        // self.obstacles
-        //     .push(Obstacle::new(self.player.x + WIDTH as f32 + 10., self.score));
-        // self.obstacles
-        //     .push(Obstacle::new(self.player.x + WIDTH as f32 + 40., self.score));
-        // self.obstacles
-        //     .push(Obstacle::new(self.player.x + WIDTH  as f32 + 60., self.score));
-        // }
-
-        // self.obstacles = self
-        //     .obstacles
-        //     .iter()
-        //     .filter(|o| o.x >= self.player.x)
-        //     .copied()
-        //     .collect();
-
-        //  if self.player.y > HEIGHT as f32 || self.obstacle.hit_obstacle(&self.player) {
-        //      self.mode = GameMode::GameOver;
-        // }
     }
 }
 
@@ -220,9 +175,6 @@ impl GameState for State {
             GameMode::Playing => self.play(ctx),
             GameMode::GameOver => self.dead(ctx),
         }
-
-        //ctx.cls();
-        //ctx.print(1, 1, "Hello.");
     }
 }
 
