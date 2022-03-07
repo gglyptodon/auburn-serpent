@@ -15,9 +15,11 @@ pub struct State {
 
 impl State {
     pub fn new() -> Self {
+        let mut random = RandomNumberGenerator::new();
+
         Self {
             mode: GameMode::GameMenu,
-            player: Player::new(25, 35, None),
+            player: Player::new( random.range(1,WIDTH), random.range(1,HEIGHT), None),
             frame_time: 0.0,
             score: 0,
             item: Item::spawn(),
@@ -25,10 +27,11 @@ impl State {
         }
     }
     fn restart(&mut self) {
+        let mut random = RandomNumberGenerator::new();
         if let Some(symbol) = self.symbol {
-            self.player = Player::new(25, 35, Some(symbol));
+            self.player =  Player::new( random.range(1,WIDTH), random.range(1,HEIGHT), Some(symbol));
         } else {
-            self.player = Player::new(25, 35, None);
+            self.player = Player::new( random.range(1,WIDTH), random.range(1,HEIGHT), None);
         }
         self.score = 0;
         self.item = Item::spawn();
