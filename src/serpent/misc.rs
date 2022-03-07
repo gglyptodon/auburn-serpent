@@ -94,9 +94,7 @@ impl State {
         self.player.x = self.player.segments.get(0).unwrap().x;
         self.player.y = self.player.segments.get(0).unwrap().y;
         ctx.cls_bg(DARK_GRAY);
-        ctx.print(0, 1, format!("score: {}", self.score));
-        ctx.print(0, 3, format!("x: {}, y: {}", self.player.x, self.player.y));
-        ctx.print(0, 5, format!("length: {}", self.player.length));
+        ctx.print(0, 0, format!("{}", self.score));
 
         self.frame_time += ctx.frame_time_ms;
         if self.frame_time > FRAME_DURATION {
@@ -137,13 +135,13 @@ impl State {
         if self.player.y > HEIGHT {
             self.mode = GameMode::GameOver
         }
-        if self.player.y < 0 {
+        if self.player.y <= 0 {
             self.mode = GameMode::GameOver
         }
         if self.player.x < 0 {
             self.mode = GameMode::GameOver
         }
-        if self.player.x > WIDTH {
+        if self.player.x >= WIDTH {
             self.mode = GameMode::GameOver
         }
         for s in self.player.segments.iter().skip(1) {
@@ -160,6 +158,7 @@ impl State {
         if self.player.x == self.item.x && self.player.y == self.item.y {
             self.player.append();
             self.item = Item::spawn();
+            self.score+=1;
         }
     }
 }
