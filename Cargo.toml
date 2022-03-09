@@ -8,6 +8,6 @@ bracket-lib = "~0.8.1"
 getrandom = { version = "0.2", features = ["js"] }
 
 
-[[bin]]
-name = "main"
-path = "src/main.rs"
+#[[bin]]
+#name = "main"
+#path = "src/main.rs"

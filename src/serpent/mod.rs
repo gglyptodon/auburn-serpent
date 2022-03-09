@@ -1,2 +1,3 @@
+pub mod item;
+pub mod misc;
 pub mod player;
-pub mod obstacle;
