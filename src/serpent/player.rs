@@ -1,4 +1,6 @@
 use bracket_lib::prelude::*;
+use crate::serpent::item as serpent_item;
+use crate::serpent::item::ItemType;
 
 #[derive(Copy, Clone, Debug)]
 pub struct Segment {
@@ -163,6 +165,17 @@ impl Player {
             direction_now: Direction::Stopped,
             glyph: 3,
         })
+    }
+    pub fn eat(&mut self, item: &serpent_item::Item){
+        match item.item_type {
+            serpent_item::ItemType::ShorterSnake => {
+                if let Some(_s) = self.segments.get(1){
+                    self.segments.pop();
+                }
+            }
+            ItemType::NormalBonus => {self.append()}
+            ItemType::Mystery => {println!("mysterious")}
+        }
     }
 }
 

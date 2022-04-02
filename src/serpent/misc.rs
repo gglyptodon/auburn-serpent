@@ -7,6 +7,7 @@ use crate::{FRAME_DURATION, HEIGHT, WIDTH};
 pub struct State {
     mode: GameMode,
     player: Player,
+    player_two: Option<Player>,
     frame_time: f32,
     score: i32,
     item: Item,
@@ -20,6 +21,7 @@ impl State {
         Self {
             mode: GameMode::GameMenu,
             player: Player::new(random.range(1, WIDTH), random.range(1, HEIGHT), None),
+            player_two: None,
             frame_time: 0.0,
             score: 0,
             item: Item::spawn(),
@@ -37,6 +39,7 @@ impl State {
         } else {
             self.player = Player::new(random.range(1, WIDTH), random.range(1, HEIGHT), None);
         }
+        self.player_two = None;
         self.score = 0;
         self.item = Item::spawn();
         self.frame_time = 0.0;
@@ -86,6 +89,9 @@ impl State {
             match k {
                 VirtualKeyCode::Key1 => self.symbol = Some(1),
                 VirtualKeyCode::Key2 => self.symbol = Some(2),
+                VirtualKeyCode::Key3 => {
+                    let mut random = RandomNumberGenerator::new();
+                    self.player_two = Some(Player::new(random.range(1, WIDTH), random.range(1, HEIGHT), None))},
 
                 VirtualKeyCode::P => self.restart(),
                 VirtualKeyCode::Q => ctx.quitting = true,
@@ -160,7 +166,8 @@ impl State {
         self.item.render(ctx);
 
         if self.player.x == self.item.x && self.player.y == self.item.y {
-            self.player.append();
+            self.player.eat(&self.item);
+            //self.player.append();
             self.item = Item::spawn();
             self.score += 1;
         }
